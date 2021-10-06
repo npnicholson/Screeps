@@ -66,11 +66,12 @@ export const builder = {
             }
 
             // Finally if none of those exist with energy, go harvest at a source
-            const sources = creep.room.find(FIND_SOURCES);
-            let source = sources[0];
+            // const sources = creep.room.find(FIND_SOURCES);
+            // let source = sources[0];
+            let source = creep.pos.findClosestByRange(FIND_SOURCES);
             // if (sources.length > 1) source = sources[1];
 
-            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+            if (source && creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
 

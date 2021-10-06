@@ -51,12 +51,12 @@ declare global {
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
 
-  const sites = Game.spawns['Alpha'].room.find(FIND_MY_CONSTRUCTION_SITES);
+  const sites = Game.spawns['Spawn1'].room.find(FIND_MY_CONSTRUCTION_SITES);
 
 
   let target_harvesters = 0;
   let target_builders = 0;
-  let target_upgraders = 1;
+  let target_upgraders = 2;
   let target_repairers = 1;
 
   if (sites.length > 0) {
@@ -67,7 +67,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     target_builders = 0;
   }
 
-  console.log(target_harvesters, target_builders, target_repairers, target_upgraders);
+  // console.log(target_harvesters, target_builders, target_repairers, target_upgraders);
 
   // console.log(`Spawns: ${Game.spawns}`);
 
@@ -99,25 +99,25 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   if (num_harvesters < target_harvesters) {
     const creep_name = 'harvester-' + Date.now();
-    const res = Game.spawns.Alpha.spawnCreep([WORK, WORK, CARRY, MOVE], creep_name, { memory: { role: 'harvester', action: ACTION_IDLE, target: {} } });
+    const res = Game.spawns.Spawn1.spawnCreep([WORK, WORK, CARRY, MOVE], creep_name, { memory: { role: 'harvester', action: ACTION_IDLE, target: {} } });
     if (res === 0)  console.log('Building Harvester: ' + creep_name);
   }
 
   if (num_builders < target_builders) {
     const creep_name = 'builder-' + Date.now();
-    const res = Game.spawns.Alpha.spawnCreep([WORK, CARRY, MOVE, MOVE], creep_name, { memory: { role: 'builder', action: ACTION_IDLE, target: {} } });
+    const res = Game.spawns.Spawn1.spawnCreep([WORK, CARRY, MOVE, MOVE], creep_name, { memory: { role: 'builder', action: ACTION_IDLE, target: {} } });
     if (res === 0)  console.log('Building Builder: ' + creep_name);
   }
 
   if (num_upgraders < target_upgraders) {
     const creep_name = 'upgrader-' + Date.now();
-    const res = Game.spawns.Alpha.spawnCreep([WORK, WORK, CARRY, MOVE], creep_name, { memory: { role: 'upgrader', action: ACTION_IDLE, target: {} } });
+    const res = Game.spawns.Spawn1.spawnCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], creep_name, { memory: { role: 'upgrader', action: ACTION_IDLE, target: {} } });
     if (res === 0) console.log('Building Upgrader: ' + creep_name);
   }
 
   if (num_repairers < target_repairers) {
     const creep_name = 'repairer-' + Date.now();
-    const res = Game.spawns.Alpha.spawnCreep([WORK, CARRY, MOVE, MOVE], creep_name, { memory: { role: 'repairer', action: ACTION_IDLE, target: {} } });
+    const res = Game.spawns.Spawn1.spawnCreep([WORK, CARRY, MOVE, MOVE], creep_name, { memory: { role: 'repairer', action: ACTION_IDLE, target: {} } });
     if (res === 0) console.log('Building Repairer: ' + creep_name);
   }
 
