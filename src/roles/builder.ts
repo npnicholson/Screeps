@@ -10,9 +10,7 @@ export const builder = {
     },
 
     kill: function (creep: Creep) {
-        // If this creep is idle OR its harvesting but empty, kill it
-        if (creep.memory.action === ACTION_IDLE ||
-            (creep.memory.action === ACTION_HARVESTING && creep.store[RESOURCE_ENERGY] == 0)) creep.suicide();
+        creep.suicide();
     },
 
     /** @param {Creep} creep **/

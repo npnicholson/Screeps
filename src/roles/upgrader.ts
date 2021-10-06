@@ -15,9 +15,6 @@ export const upgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep: Creep) {
-
-
-
         if((creep.memory.action === ACTION_UPGRADING || creep.memory.action === ACTION_IDLE) && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.action = ACTION_HARVESTING;
             creep.say('🔄 harvest');
