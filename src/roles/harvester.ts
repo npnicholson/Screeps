@@ -88,7 +88,7 @@ function chooseSource(creep: Creep): Id<Source> | undefined {
     // const sources = creep.room.find(FIND_SOURCES);
     // if (sources.length > 0) return sources[Math.floor(Math.random() * sources.length)].id;
     // else return undefined;
-    let source = creep.pos.findClosestByRange(FIND_SOURCES);
+    let source = creep.pos.findClosestByPath(FIND_SOURCES);
     return (source) ? source.id : undefined;
 
 }
