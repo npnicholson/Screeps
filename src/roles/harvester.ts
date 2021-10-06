@@ -84,7 +84,7 @@ export const harvester = {
     }
 };
 
-function chooseSource(creep: Creep) {
+function chooseSource(creep: Creep): Id<Source> | undefined {
     // const sources = creep.room.find(FIND_SOURCES);
     // if (sources.length > 0) return sources[Math.floor(Math.random() * sources.length)].id;
     // else return undefined;
@@ -93,7 +93,7 @@ function chooseSource(creep: Creep) {
 
 }
 
-function chooseStructure(creep: Creep) {
+function chooseStructure(creep: Creep): Id<Structure> | undefined {
     const structures = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_EXTENSION ||
