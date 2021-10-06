@@ -51,11 +51,11 @@ declare global {
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
 
-  const sites = Game.spawns['Alpha'].room.find(FIND_MY_CONSTRUCTION_SITES);
+  const sites = Game.spawns.Alpha.room.find(FIND_MY_CONSTRUCTION_SITES);
 
   let target_harvesters = 1;
   let target_builders = 0;
-  let target_upgraders = 1;
+  let target_upgraders = 2;
   let target_repairers = 1;
 
   if (sites.length > 0) {

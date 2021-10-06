@@ -85,9 +85,12 @@ export const harvester = {
 };
 
 function chooseSource(creep: Creep) {
-    const sources = creep.room.find(FIND_SOURCES);
-    if (sources.length > 0) return sources[Math.floor(Math.random() * sources.length)].id;
-    else return undefined;
+    // const sources = creep.room.find(FIND_SOURCES);
+    // if (sources.length > 0) return sources[Math.floor(Math.random() * sources.length)].id;
+    // else return undefined;
+    let source = creep.pos.findClosestByRange(FIND_SOURCES);
+    return (source) ? source.id : undefined;
+
 }
 
 function chooseStructure(creep: Creep) {
