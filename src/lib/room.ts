@@ -144,21 +144,21 @@ export class RoomManager {
       if (res === 0) console.log('Building Harvester (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
-    if (this.manifest.creeps[role.BUILDER] < this.assignments.creeps[role.BUILDER]) {
+    else if (this.manifest.creeps[role.BUILDER] < this.assignments.creeps[role.BUILDER]) {
       const creep_name = 'builder-' + Date.now();
       const structure = buildStructure(spawn_cap, role.BUILDER);
       const res = this.room.memory.spawns[0].spawnCreep(structure, creep_name, { memory: { action: 0, role: role.BUILDER, target: {} } });
       if (res === 0) console.log('Building Builder (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
-    if (this.manifest.creeps[role.UPGRADER] < this.assignments.creeps[role.UPGRADER]) {
+    else if (this.manifest.creeps[role.UPGRADER] < this.assignments.creeps[role.UPGRADER]) {
       const creep_name = 'upgrader-' + Date.now();
       const structure = buildStructure(spawn_cap, role.UPGRADER);
       const res = this.room.memory.spawns[0].spawnCreep(structure, creep_name, { memory: { action: 0, role: role.UPGRADER, target: {} } });
       if (res === 0) console.log('Building Updater (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
-    if (this.manifest.creeps[role.REPAIRER] < this.assignments.creeps[role.REPAIRER]) {
+    else if (this.manifest.creeps[role.REPAIRER] < this.assignments.creeps[role.REPAIRER]) {
       const creep_name = 'repairer-' + Date.now();
       const structure = buildStructure(spawn_cap, role.REPAIRER);
       const res = this.room.memory.spawns[0].spawnCreep(structure, creep_name, { memory: { action: 0, role: role.REPAIRER, target: {} } });
