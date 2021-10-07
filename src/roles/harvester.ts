@@ -4,10 +4,12 @@ const ACTION_BUILDING = 2;
 const ACTION_UPGRADING = 3;
 const ACTION_DELIVERING = 4;
 
+import * as role from "types/role";
+
 export const harvester = {
 
     identify: function (creep: Creep) {
-        return creep.memory.role === 'harvester';
+        return creep.memory.role === role.HARVESTER;
     },
 
     kill: function (creep: Creep) {
@@ -88,9 +90,8 @@ function chooseSource(creep: Creep): Id<Source> | undefined {
     // const sources = creep.room.find(FIND_SOURCES);
     // if (sources.length > 0) return sources[Math.floor(Math.random() * sources.length)].id;
     // else return undefined;
-    let source = creep.pos.findClosestByPath(FIND_SOURCES);
+    let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
     return (source) ? source.id : undefined;
-
 }
 
 function chooseStructure(creep: Creep): Id<Structure> | undefined {

@@ -4,9 +4,11 @@ const ACTION_BUILDING = 2;
 const ACTION_UPGRADING = 3;
 const ACTION_DELIVERING = 4;
 
+import * as role from "types/role";
+
 export const builder = {
     identify: function (creep: Creep) {
-        return creep.memory.role === 'builder';
+        return creep.memory.role === role.BUILDER;
     },
 
     kill: function (creep: Creep) {
@@ -66,7 +68,7 @@ export const builder = {
             // Finally if none of those exist with energy, go harvest at a source
             // const sources = creep.room.find(FIND_SOURCES);
             // let source = sources[0];
-            let source = creep.pos.findClosestByPath(FIND_SOURCES);
+            let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
             // if (sources.length > 1) source = sources[1];
 
             if (source && creep.harvest(source) == ERR_NOT_IN_RANGE) {

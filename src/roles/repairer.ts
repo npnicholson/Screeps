@@ -5,9 +5,11 @@ const ACTION_UPGRADING = 3;
 const ACTION_DELIVERING = 4;
 const ACTION_REPAIRING = 5;
 
+import * as role from "types/role";
+
 export const repairer = {
     identify: function (creep: Creep) {
-        return creep.memory.role === 'repairer';
+        return creep.memory.role === role.REPAIRER;
     },
 
     kill: function (creep: Creep) {
@@ -31,6 +33,9 @@ export const repairer = {
                     return structure.hits < structure.hitsMax;
                 }
             });
+
+            targets
+
             if (targets.length) {
                 if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
@@ -72,7 +77,7 @@ export const repairer = {
             // const sources = creep.room.find(FIND_SOURCES);
             // let source = sources[0];
             // if (sources.length > 1) source = sources[1];
-            let source = creep.pos.findClosestByPath(FIND_SOURCES);
+            let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
 
             if (source && creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });

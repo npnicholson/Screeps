@@ -1,12 +1,25 @@
+
+export interface UpgraderMemory {
+
+}
+
+export class Upgrader {
+    constructor() {
+
+    }
+}
+
 const ACTION_IDLE = 0;
 const ACTION_HARVESTING = 1;
 const ACTION_BUILDING = 2;
 const ACTION_UPGRADING = 3;
 const ACTION_DELIVERING = 4;
 
+import * as role from "types/role";
+
 export const upgrader = {
     identify: function(creep: Creep) {
-        return creep.memory.role === 'upgrader';
+        return creep.memory.role === role.UPGRADER;
     },
 
     kill: function (creep: Creep) {
@@ -32,7 +45,7 @@ export const upgrader = {
         }
         else {
             // var sources = creep.room.find(FIND_SOURCES);
-            let source = creep.pos.findClosestByPath(FIND_SOURCES);
+            let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
             if(source && creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
