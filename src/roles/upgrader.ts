@@ -22,8 +22,9 @@ export const upgrader = {
         return creep.memory.role === role.UPGRADER;
     },
 
-    kill: function (creep: Creep) {
+    kill: function (creep: Creep): boolean{
         creep.suicide();
+        return true;
     },
 
     /** @param {Creep} creep **/

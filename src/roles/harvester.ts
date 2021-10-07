@@ -12,10 +12,13 @@ export const harvester = {
         return creep.memory.role === role.HARVESTER;
     },
 
-    kill: function (creep: Creep) {
+    kill: function (creep: Creep) : boolean{
         // If this creep is idle OR its harvesting but empty, kill it
         if (creep.memory.action === ACTION_IDLE ||
-            (creep.memory.action === ACTION_HARVESTING && creep.store[RESOURCE_ENERGY] == 0)) creep.suicide();
+            (creep.memory.action === ACTION_HARVESTING && creep.store[RESOURCE_ENERGY] == 0)) {
+                creep.suicide();
+                return true;
+        } else return false;
     },
 
     /** @param {Creep} creep **/

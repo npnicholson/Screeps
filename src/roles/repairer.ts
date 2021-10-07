@@ -12,8 +12,9 @@ export const repairer = {
         return creep.memory.role === role.REPAIRER;
     },
 
-    kill: function (creep: Creep) {
+    kill: function (creep: Creep): boolean {
         creep.suicide();
+        return true;
     },
 
     /** @param {Creep} creep **/

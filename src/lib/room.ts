@@ -99,28 +99,36 @@ export class RoomManager {
       this.assignments.creeps[role.HARVESTER] = 2;
       this.assignments.creeps[role.BUILDER] = 3;
       this.assignments.creeps[role.UPGRADER] = 1;
-      this.assignments.creeps[role.REPAIRER] = 2;
+      this.assignments.creeps[role.REPAIRER] = 1;
     } else {
       // No construction underway
       this.assignments.creeps[role.HARVESTER] = 2;
       this.assignments.creeps[role.BUILDER] = 0;
       this.assignments.creeps[role.UPGRADER] = 4;
-      this.assignments.creeps[role.REPAIRER] = 2;
+      this.assignments.creeps[role.REPAIRER] = 1;
     }
 
     for (const creep of this.room.memory.creeps) {
       if (harvester.identify(creep)) {
         harvester.run(creep);
-        if (this.manifest.creeps[role.HARVESTER] > this.assignments.creeps[role.HARVESTER]) harvester.kill(creep);
+        if (this.manifest.creeps[role.HARVESTER] > this.assignments.creeps[role.HARVESTER]) {
+          if(harvester.kill(creep)) this.manifest.creeps[role.HARVESTER]--;
+        }
       } else if (builder.identify(creep)) {
         builder.run(creep)
-        if (this.manifest.creeps[role.BUILDER] > this.assignments.creeps[role.BUILDER]) builder.kill(creep);
+        if (this.manifest.creeps[role.BUILDER] > this.assignments.creeps[role.BUILDER]) {
+          if( builder.kill(creep)) this.manifest.creeps[role.BUILDER]--;
+        }
       } else if (upgrader.identify(creep)) {
         upgrader.run(creep)
-        if (this.manifest.creeps[role.UPGRADER] > this.assignments.creeps[role.UPGRADER]) upgrader.kill(creep);
+        if (this.manifest.creeps[role.UPGRADER] > this.assignments.creeps[role.UPGRADER]) {
+          if (upgrader.kill(creep)) this.manifest.creeps[role.UPGRADER]--;
+        }
       } else if (repairer.identify(creep)) {
         repairer.run(creep)
-        if (this.manifest.creeps[role.REPAIRER] > this.assignments.creeps[role.REPAIRER]) repairer.kill(creep);
+        if (this.manifest.creeps[role.REPAIRER] > this.assignments.creeps[role.REPAIRER]) {
+          if (repairer.kill(creep)) this.manifest.creeps[role.REPAIRER]--;
+        }
       } else console.log('Unknown Creep Type ' + creep.memory.role + ' - ' + creep.name);
     }
 
