@@ -28,14 +28,23 @@ export const builder = {
         }
 
         if (creep.memory.action === ACTION_BUILDING) {
-            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            if (targets.length) {
-                if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+            // If there is a tower to build, build that first
+            var towers = creep.room.find(FIND_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_TOWER}});
+            if (towers.length) {
+                if (creep.build(towers[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(towers[0], { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             } else {
-                const target = creep.room.find(FIND_FLAGS);
-                creep.moveTo(target[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                // No towers, build based on first-in order
+                var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                if (targets.length) {
+                    if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                    }
+                } else {
+                    const target = creep.room.find(FIND_FLAGS);
+                    creep.moveTo(target[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                }
             }
         }
         else {

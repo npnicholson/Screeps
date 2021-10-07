@@ -11,6 +11,7 @@ export function processRooms() {
   for (const roomManager of roomManagers) {
     roomManager.room.memory.creeps = [];
     roomManager.room.memory.spawns = [];
+    roomManager.room.memory.towers = [];
   }
 
   // Assign Creeps
@@ -23,6 +24,14 @@ export function processRooms() {
   for (const spawnName in Game.spawns) {
     const spawn = Game.spawns[spawnName];
     _roomMap[spawn.room.name].memory.spawns.push(spawn);
+  }
+
+  // Assign Towers
+  for (const structureName in Game.structures) {
+    const structure = Game.structures[structureName];
+    if (structure.structureType == STRUCTURE_TOWER) {
+      _roomMap[structure.room.name].memory.towers.push(<StructureTower>structure);
+    }
   }
 
   // Process rooms
@@ -68,7 +77,47 @@ export class RoomManager {
 
   // Process all functionality of this room
   // Note: Process can be called many times after the initial creation of this object!
-  process() {
+  process() {    
+    // Process towers
+    for (const tower of this.room.memory.towers) {
+      // Find a hostile in the room
+      var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+      // Check if one could be found
+      if (closestHostile) {
+        // Notify that there is a hostile in the room
+        if (this.room.memory.hostileInRoomNotified === false) {
+          console.log(`[WARNING] The room '${this.room.name}' is under attack.`);
+          Game.notify(`[WARNING] The room '${this.room.name}' is under attack.`);
+          this.room.memory.hostileInRoomNotified = true;
+        }
+        // Check if we have a controller. If so, we will activate SafeMode.
+        if (this.room.controller !== undefined) {
+          // One was found. Check if safeMode is currently on
+          if (this.room.controller.safeMode === undefined) {
+            // SafeMode is not activated. Lets activate it if we can.
+          if (this.room.controller.safeModeAvailable) { this.room.controller.activateSafeMode(); }
+            else {
+              // We need safeMode but it isn't available. We should send an email to notify the user.
+              if (this.room.memory.safeModeFailNotified === false) {
+                console.log(`[WARNING] The room '${this.room.name}' is under attack and SafeMode is not available. This notice will not be sent again until the room is clear of hostiles.`);
+                Game.notify(`[WARNING] The room '${this.room.name}' is under attack and SafeMode is not available. This notice will not be sent again until the room is clear of hostiles.`);
+                this.room.memory.safeModeFailNotified = true;
+              }
+            }
+          } 
+        }
+        // Attack the hostile
+        tower.attack(closestHostile);
+      } else {
+        // Set that there are not hostiles in the room at the moment
+        this.room.memory.safeModeFailNotified = false;
+        this.room.memory.hostileInRoomNotified = false;
+        // A hostile was not found. Check for damaged structures.
+        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.hits < structure.hitsMax});
+        // If one was found, repair it.
+        if(closestDamagedStructure) tower.repair(closestDamagedStructure);
+      }
+    }
 
     // Reset the current manifest
     this.manifest = {
@@ -98,13 +147,13 @@ export class RoomManager {
       this.assignments.creeps[role.HARVESTER] = 2;
       this.assignments.creeps[role.BUILDER] = 3;
       this.assignments.creeps[role.UPGRADER] = 1;
-      this.assignments.creeps[role.REPAIRER] = 1;
+      this.assignments.creeps[role.REPAIRER] = 0;
     } else {
       // No construction underway
       this.assignments.creeps[role.HARVESTER] = 2;
       this.assignments.creeps[role.BUILDER] = 0;
       this.assignments.creeps[role.UPGRADER] = 4;
-      this.assignments.creeps[role.REPAIRER] = 1;
+      this.assignments.creeps[role.REPAIRER] = 0;
     }
 
     for (const creep of this.room.memory.creeps) {

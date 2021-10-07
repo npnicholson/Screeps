@@ -104,7 +104,13 @@ function chooseStructure(creep: Creep): Id<Structure> | undefined {
     });
     if (extension !== null) return extension.id;
 
-    // First try to find the closest spawn
+    // Now try to find the closest tower
+    const tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        filter: (structure) => structure.structureType === STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+    });
+    if (tower !== null) return tower.id;
+
+    // Now try to find the closest spawn
     const spawn = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => structure.structureType === STRUCTURE_SPAWN && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
     });
@@ -114,8 +120,7 @@ function chooseStructure(creep: Creep): Id<Structure> | undefined {
     const structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_CONTAINER ||
-                structure.structureType === STRUCTURE_STORAGE ||
-                structure.structureType === STRUCTURE_TOWER) &&
+                structure.structureType === STRUCTURE_STORAGE) &&
                 structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
         }
     });

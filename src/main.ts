@@ -28,7 +28,10 @@ declare global {
 
   interface RoomMemory {
     creeps: Creep[],
-    spawns: StructureSpawn[]
+    spawns: StructureSpawn[],
+    towers: StructureTower[],
+    safeModeFailNotified: boolean
+    hostileInRoomNotified: boolean
   }
 
   interface CreepMemory {
