@@ -95,7 +95,7 @@ export class RoomManager {
           // One was found. Check if safeMode is currently on
           if (this.room.controller.safeMode === undefined) {
             // SafeMode is not activated. Lets activate it if we can.
-          if (this.room.controller.safeModeAvailable) { this.room.controller.activateSafeMode(); }
+          if (this.room.controller.safeModeAvailable) { /*this.room.controller.activateSafeMode();*/ }
             else {
               // We need safeMode but it isn't available. We should send an email to notify the user.
               if (this.room.memory.safeModeFailNotified === false) {
