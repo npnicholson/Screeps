@@ -144,11 +144,11 @@ export class RoomManager {
       if (res === 0) console.log('Building Harvester (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
-    else if (this.manifest.creeps[role.BUILDER] < this.assignments.creeps[role.BUILDER]) {
-      const creep_name = 'builder-' + Date.now();
-      const structure = buildStructure(spawn_cap, role.BUILDER);
-      const res = this.room.memory.spawns[0].spawnCreep(structure, creep_name, { memory: { action: 0, role: role.BUILDER, target: {} } });
-      if (res === 0) console.log('Building Builder (C: ' + bodyCost(structure) + ') -- ' + creep_name);
+    else if (this.manifest.creeps[role.REPAIRER] < this.assignments.creeps[role.REPAIRER]) {
+      const creep_name = 'repairer-' + Date.now();
+      const structure = buildStructure(spawn_cap, role.REPAIRER);
+      const res = this.room.memory.spawns[0].spawnCreep(structure, creep_name, { memory: { action: 0, role: role.REPAIRER, target: {} } });
+      if (res === 0) console.log('Building Repairer (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
     else if (this.manifest.creeps[role.UPGRADER] < this.assignments.creeps[role.UPGRADER]) {
@@ -158,11 +158,11 @@ export class RoomManager {
       if (res === 0) console.log('Building Updater (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
-    else if (this.manifest.creeps[role.REPAIRER] < this.assignments.creeps[role.REPAIRER]) {
-      const creep_name = 'repairer-' + Date.now();
-      const structure = buildStructure(spawn_cap, role.REPAIRER);
-      const res = this.room.memory.spawns[0].spawnCreep(structure, creep_name, { memory: { action: 0, role: role.REPAIRER, target: {} } });
-      if (res === 0) console.log('Building Repairer (C: ' + bodyCost(structure) + ') -- ' + creep_name);
+    else if (this.manifest.creeps[role.BUILDER] < this.assignments.creeps[role.BUILDER]) {
+      const creep_name = 'builder-' + Date.now();
+      const structure = buildStructure(spawn_cap, role.BUILDER);
+      const res = this.room.memory.spawns[0].spawnCreep(structure, creep_name, { memory: { action: 0, role: role.BUILDER, target: {} } });
+      if (res === 0) console.log('Building Builder (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
     new RoomVisual(this.room.name).text(`C H:${this.assignments.creeps[role.HARVESTER]}, B:${this.assignments.creeps[role.BUILDER]}, R:${this.assignments.creeps[role.REPAIRER]}, U:${this.assignments.creeps[role.UPGRADER]}`, 10, 5, { color: 'green', font: 0.8 });
