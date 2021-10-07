@@ -131,9 +131,6 @@ export class RoomManager {
       } else console.log('Unknown Creep Type ' + creep.memory.role + ' - ' + creep.name);
     }
 
-    new RoomVisual(this.room.name).text(`H:${this.assignments.creeps[role.HARVESTER]}, B:${this.assignments.creeps[role.BUILDER]}, R:${this.assignments.creeps[role.REPAIRER]}, U:${this.assignments.creeps[role.UPGRADER]}`, 10, 5, { color: 'green', font: 0.8 });
-    new RoomVisual(this.room.name).text(`H:${this.assignments.creeps[role.HARVESTER] - this.manifest.creeps[role.HARVESTER]}, B:${this.assignments.creeps[role.BUILDER] - this.manifest.creeps[role.BUILDER]}, R:${this.assignments.creeps[role.REPAIRER] - this.manifest.creeps[role.REPAIRER]}, U:${this.assignments.creeps[role.UPGRADER] - this.manifest.creeps[role.UPGRADER]}`, 10, 6, { color: 'green', font: 0.8 });
-
     // This is the total energy storage (spawn and extenders) available to be filled in this room.
     // If there is at least one harvester, then we can make something up to the energy that the room
     // can hold. Otherwise, we can only make something that is 300 energy
@@ -168,6 +165,9 @@ export class RoomManager {
       if (res === 0) console.log('Building Repairer (C: ' + bodyCost(structure) + ') -- ' + creep_name);
     }
 
+    new RoomVisual(this.room.name).text(`C H:${this.assignments.creeps[role.HARVESTER]}, B:${this.assignments.creeps[role.BUILDER]}, R:${this.assignments.creeps[role.REPAIRER]}, U:${this.assignments.creeps[role.UPGRADER]}`, 10, 5, { color: 'green', font: 0.8 });
+    new RoomVisual(this.room.name).text(`A H:${this.assignments.creeps[role.HARVESTER] - this.manifest.creeps[role.HARVESTER]}, B:${this.assignments.creeps[role.BUILDER] - this.manifest.creeps[role.BUILDER]}, R:${this.assignments.creeps[role.REPAIRER] - this.manifest.creeps[role.REPAIRER]}, U:${this.assignments.creeps[role.UPGRADER] - this.manifest.creeps[role.UPGRADER]}`, 10, 6, { color: 'green', font: 0.8 });
+    new RoomVisual(this.room.name).text(`I E:${this.room.energyCapacityAvailable}, S:${spawn_cap}`, 10, 7, { color: 'green', font: 0.8 });
   }
 };
 
@@ -176,9 +176,11 @@ function buildStructure(energy_capacity: number, role: role.Roles): Array<BodyPa
   // If the energy capacity exactly matches one of the configurations we already have, then
   // just reference it directly. EG: energy_capacity = 300, PARTS_CONFIG[role][300] exists
   if (PARTS_CONFIG[role][energy_capacity]) return PARTS_CONFIG[role][energy_capacity];
-  else {                                                                    // 425
-    const energy_levels = Object.keys(PARTS_CONFIG[role]); // ['300' '350' '400' '450' '500'...]
+  else {
+    const energy_levels = Object.keys(PARTS_CONFIG[role]);
 
+    // Work backwards through the list of energy levels and find the first one that is less than
+    // the amount of energy capacity we have
     let max = -1;
     for (let i = energy_levels.length; i > 0; i--) {
       const level = parseInt(energy_levels[i]);

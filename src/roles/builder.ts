@@ -65,10 +65,11 @@ export const builder = {
                 return;
             }
 
-            // Next collect from containers
+            // Next collect from containers or storage
             const structures = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return structure.structureType == STRUCTURE_CONTAINER &&
+                    return (structure.structureType == STRUCTURE_CONTAINER ||
+                            structure.structureType === STRUCTURE_STORAGE) &&
                         structure.store.getUsedCapacity(RESOURCE_ENERGY) > 100;
                 }
             });

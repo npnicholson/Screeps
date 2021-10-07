@@ -114,6 +114,7 @@ function chooseStructure(creep: Creep): Id<Structure> | undefined {
     const structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_CONTAINER ||
+                structure.structureType === STRUCTURE_STORAGE ||
                 structure.structureType === STRUCTURE_TOWER) &&
                 structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
         }
