@@ -4,8 +4,7 @@ import { upgrader } from "roles/upgrader";
 import { repairer } from "roles/repairer";
 
 import * as role from "headers/role";
-import { PARTS_CONFIG } from "headers/const";
-import { type } from "os";
+import { PARTS_CONFIG, bodyCost } from "lib/creep_structure";
 
 export function processRooms() {
   // Clear the memory
@@ -192,12 +191,4 @@ function buildStructure(energy_capacity: number, role: role.Roles): Array<BodyPa
     // never happen
     return [ ];
   }
-
-}
-
-function bodyCost(body: Array<BodyPartConstant>)
-{
-    let sum = 0;
-    for (let i in body) sum += BODYPART_COST[body[i]];
-    return sum;
 }

@@ -60,6 +60,19 @@ export const repairer = {
                 return;
             }
 
+            // Next collect from ruins
+            const ruins = creep.room.find(FIND_RUINS, {
+                filter: (tomb) => {
+                    return tomb.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
+                }
+            })
+            if (ruins.length > 0) {
+                if (creep.withdraw(ruins[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(ruins[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+                }
+                return;
+            }
+
             // Next collect from containers
             const structures = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
