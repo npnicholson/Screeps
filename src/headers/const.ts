@@ -1,0 +1,38 @@
+import * as role from "headers/role";
+
+// Configurations to be used when building creeps that fill roles
+export const PARTS_CONFIG: { [key in role.Roles]: { [key: number]: Array<BodyPartConstant> } } = {
+  [role.UNASSIGNED]: {},
+  [role.HARVESTER]: {
+    300: [WORK, WORK, CARRY, MOVE],
+    350: [WORK, WORK, CARRY, MOVE, MOVE],
+    400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+    450: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE],
+    500: [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+    550: [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE]
+  },
+  [role.BUILDER]: {
+    300: [WORK, WORK, CARRY, MOVE],
+    350: [WORK, WORK, CARRY, MOVE, MOVE],
+    400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+    450: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE],
+    500: [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+    550: [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE]
+  },
+  [role.UPGRADER]: {
+    300: [WORK, WORK, CARRY, MOVE],
+    350: [WORK, WORK, CARRY, MOVE, MOVE],
+    400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+    450: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE],
+    500: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+    550: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE]
+  },
+  [role.REPAIRER]: {
+    300: [WORK, WORK, CARRY, MOVE],
+    350: [WORK, WORK, CARRY, MOVE, MOVE],
+    400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+    450: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE],
+    500: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+    550: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE]
+  }
+};

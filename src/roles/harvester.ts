@@ -4,7 +4,7 @@ const ACTION_BUILDING = 2;
 const ACTION_UPGRADING = 3;
 const ACTION_DELIVERING = 4;
 
-import * as role from "types/role";
+import * as role from "headers/role";
 
 export const harvester = {
 
@@ -95,16 +95,28 @@ function chooseSource(creep: Creep): Id<Source> | undefined {
 }
 
 function chooseStructure(creep: Creep): Id<Structure> | undefined {
-    const structures = creep.room.find(FIND_STRUCTURES, {
+    // First try to find the closest extension
+    const extension = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        filter: (structure) => structure.structureType === STRUCTURE_EXTENSION && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+    });
+    if (extension !== null) return extension.id;
+
+    // First try to find the closest spawn
+    const spawn = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        filter: (structure) => structure.structureType === STRUCTURE_SPAWN && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+    });
+    if (spawn !== null) return spawn.id;
+
+    // Next try all of the other structures that need energy
+    const structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_EXTENSION ||
-                structure.structureType == STRUCTURE_SPAWN ||
-                structure.structureType == STRUCTURE_CONTAINER ||
-                structure.structureType == STRUCTURE_TOWER) &&
+            return (structure.structureType === STRUCTURE_CONTAINER ||
+                structure.structureType === STRUCTURE_TOWER) &&
                 structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
         }
     });
+    if (structure !== null) return structure.id;
 
-    if (structures.length > 0) return structures[Math.floor(Math.random() * structures.length)].id;
-    else return undefined;
+    // Otherwise there are no structures to use
+    return undefined;
 }

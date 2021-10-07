@@ -15,7 +15,7 @@ const ACTION_BUILDING = 2;
 const ACTION_UPGRADING = 3;
 const ACTION_DELIVERING = 4;
 
-import * as role from "types/role";
+import * as role from "headers/role";
 
 export const upgrader = {
     identify: function(creep: Creep) {

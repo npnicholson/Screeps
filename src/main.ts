@@ -7,7 +7,7 @@ import { ErrorMapper } from "utils/ErrorMapper";
 
 import * as roomWrapper from "lib/room";
 
-import * as role from "types/role";
+import * as role from "headers/role";
 
 declare global {
 
