@@ -108,7 +108,7 @@ function chooseStructure(creep: Creep): Id<Structure> | undefined {
 
     // Now try to find the closest tower
     const tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-        filter: (structure) => structure.structureType === STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+        filter: (structure) => structure.structureType === STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.energy
     });
     if (tower !== null) return tower.id;
 
