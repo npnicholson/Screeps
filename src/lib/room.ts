@@ -12,6 +12,7 @@ export function processRooms() {
     roomManager.room.memory.creeps = [];
     roomManager.room.memory.spawns = [];
     roomManager.room.memory.towers = [];
+    roomManager.room.memory.links = [];
   }
 
   // Assign Creeps
@@ -26,11 +27,13 @@ export function processRooms() {
     _roomMap[spawn.room.name].memory.spawns.push(spawn);
   }
 
-  // Assign Towers
+  // Assign Towers & Links
   for (const structureName in Game.structures) {
     const structure = Game.structures[structureName];
     if (structure.structureType == STRUCTURE_TOWER) {
       _roomMap[structure.room.name].memory.towers.push(<StructureTower>structure);
+    } else if (structure.structureType == STRUCTURE_LINK) {
+      _roomMap[structure.room.name].memory.links.push(<StructureLink>structure);
     }
   }
 
@@ -118,10 +121,38 @@ export class RoomManager {
         if(closestDamagedStructureNoWall) tower.repair(closestDamagedStructureNoWall);
         else {
           // Maybe a wall needs repair (only walls with less than 100000 HP)
-          var closestDamagedStructureWall = tower.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax && structure.hits < 100000});
+          var closestDamagedStructureWall = tower.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax && structure.hits < 10000});
           // If one was found, repair it.
           if(closestDamagedStructureWall) tower.repair(closestDamagedStructureWall);
         }
+      }
+    }
+    
+
+    // Process Links
+    if (this.room.memory.links.length == 2 && this.room.controller !== undefined) {
+      // We only support two links at the moment
+      let link0 = this.room.memory.links[0];
+      let link1 = this.room.memory.links[1];
+      // Get the one close to the controller
+      let link0DistController = link0.pos.getRangeTo(this.room.controller.pos.x, this.room.controller.pos.y);
+      let link1DistController = link1.pos.getRangeTo(this.room.controller.pos.x, this.room.controller.pos.y);
+      if (link0DistController < link1DistController) {
+        // Link 0 is the controller link
+        this.room.memory.controllerLink = link0;
+        this.room.memory.sourceLink = link1;
+      } else {
+        // Link 1 is the controller link
+        this.room.memory.controllerLink = link1;
+        this.room.memory.sourceLink = link0;
+      }
+      this.room.visual.line(this.room.memory.controllerLink.pos, this.room.memory.sourceLink.pos, {color: '#0055FF', opacity: 0.2, lineStyle: 'dashed'});
+      this.room.visual.circle(this.room.memory.controllerLink.pos, {fill: 'transparent', radius: 0.55, stroke: '#0055FF', lineStyle: 'dashed'});
+      // Check if the source link is ready for a transfer
+      if(this.room.memory.controllerLink.store.getFreeCapacity(RESOURCE_ENERGY) !== 0 && 
+         this.room.memory.sourceLink.cooldown === 0 &&
+         this.room.memory.sourceLink.store.energy > 0) {
+         this.room.memory.sourceLink.transferEnergy(this.room.memory.controllerLink);
       }
     }
 
@@ -156,10 +187,19 @@ export class RoomManager {
       this.assignments.creeps[role.REPAIRER] = 0;
     } else {
       // No construction underway
-      this.assignments.creeps[role.HARVESTER] = 2;
-      this.assignments.creeps[role.BUILDER] = 0;
-      this.assignments.creeps[role.UPGRADER] = 4;
-      this.assignments.creeps[role.REPAIRER] = 0;
+      // Check if there is a link to the controller
+      if (this.room.memory.links.length == 2) {
+        // There is a link. We need more harvesters to keep up
+        this.assignments.creeps[role.HARVESTER] = 4;
+        this.assignments.creeps[role.BUILDER] = 0;
+        this.assignments.creeps[role.UPGRADER] = 2;
+        this.assignments.creeps[role.REPAIRER] = 0;
+      } else {
+        this.assignments.creeps[role.HARVESTER] = 2;
+        this.assignments.creeps[role.BUILDER] = 0;
+        this.assignments.creeps[role.UPGRADER] = 4;
+        this.assignments.creeps[role.REPAIRER] = 0;
+      }
     }
 
     for (const creep of this.room.memory.creeps) {

@@ -68,7 +68,9 @@ export const harvester = {
             if (creep.memory.target.source) {
                 const target = Game.getObjectById(creep.memory.target.source);
                 if (target) {
-                    if (creep.harvest(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } });
+                    let result = creep.harvest(target);
+                    if (result == ERR_NOT_IN_RANGE) creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } });
+                    else if (result == ERR_NOT_ENOUGH_RESOURCES) creep.memory.action = ACTION_IDLE;
                     return;
                 }
             }
@@ -116,15 +118,19 @@ function chooseStructure(creep: Creep): Id<Structure> | undefined {
     });
     if (spawn !== null) return spawn.id;
 
+    // Now try to find the source link
+    const link = creep.room.memory.sourceLink;
+    if (link !== null && link.store.getFreeCapacity(RESOURCE_ENERGY) > 0) return link.id;
+
     // Next try all of the other structures that need energy
-    const structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    const structures = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_CONTAINER ||
                 structure.structureType === STRUCTURE_STORAGE) &&
                 structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
         }
     });
-    if (structure !== null) return structure.id;
+    if (structures !== null && structures.length > 0) return structures[0].id;
 
     // Otherwise there are no structures to use
     return undefined;

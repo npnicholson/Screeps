@@ -45,10 +45,19 @@ export const upgrader = {
             }
         }
         else {
-            // var sources = creep.room.find(FIND_SOURCES);
-            let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-            if(source && creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+            // See if the closest link has energy
+            let link = creep.room.memory.controllerLink;
+            if (link && link.store.energy > 0) {
+                // There is a link to get stuff from
+                if (creep.withdraw(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(link, { visualizePathStyle: { stroke: '#ffaa00' } });
+                }
+            } else {
+                // var sources = creep.room.find(FIND_SOURCES);
+                let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+                if(source && creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
             }
         }
     }

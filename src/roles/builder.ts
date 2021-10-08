@@ -35,15 +35,23 @@ export const builder = {
                     creep.moveTo(towers[0], { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             } else {
-                // No towers, build based on first-in order
-                var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                if (targets.length) {
-                    if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                // No towers, check for roads
+                var road = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_ROAD}});
+                if (road) {
+                    if (creep.build(road) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(road, { visualizePathStyle: { stroke: '#ffffff' } });
                     }
                 } else {
-                    const target = creep.room.find(FIND_FLAGS);
-                    creep.moveTo(target[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                    // No roads, check for other sites
+                    var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                    if (targets.length) {
+                        if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                        }
+                    } else {
+                        const target = creep.room.find(FIND_FLAGS);
+                        creep.moveTo(target[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                    }
                 }
             }
         }

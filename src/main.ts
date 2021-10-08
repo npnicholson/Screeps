@@ -30,6 +30,9 @@ declare global {
     creeps: Creep[],
     spawns: StructureSpawn[],
     towers: StructureTower[],
+    links: StructureLink[],
+    sourceLink: StructureLink,
+    controllerLink: StructureLink,
     safeModeFailNotified: boolean
     hostileInRoomNotified: boolean
   }
