@@ -112,10 +112,16 @@ export class RoomManager {
         // Set that there are not hostiles in the room at the moment
         this.room.memory.safeModeFailNotified = false;
         this.room.memory.hostileInRoomNotified = false;
-        // A hostile was not found. Check for damaged structures.
-        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.hits < structure.hitsMax});
+        // A hostile was not found. Check for damaged structures that aren't walls.
+        var closestDamagedStructureNoWall = tower.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.structureType !== STRUCTURE_WALL && structure.hits < structure.hitsMax});
         // If one was found, repair it.
-        if(closestDamagedStructure) tower.repair(closestDamagedStructure);
+        if(closestDamagedStructureNoWall) tower.repair(closestDamagedStructureNoWall);
+        else {
+          // Maybe a wall needs repair (only walls with less than 100000 HP)
+          var closestDamagedStructureWall = tower.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax && structure.hits < 100000});
+          // If one was found, repair it.
+          if(closestDamagedStructureWall) tower.repair(closestDamagedStructureWall);
+        }
       }
     }
 
